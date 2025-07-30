@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>BNDL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>11.0</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2025. All rights reserved.</string>
+    <key>LSArchitecturePriority</key>
+    <array>
+        <string>arm64</string>
+    </array>
+    <key>FxPlug</key>
+    <dict>
+        <key>pluginDict</key>
+        <dict>
+            <key>AnalogFilmEffect</key>
+            <dict>
+                <key>groupUUID</key>
+                <string>E00A24F2-8B5E-4F91-A8B9-2D1E3F4A5B6C</string>
+                <key>displayName</key>
+                <string>Analog Film Emulation</string>
+                <key>version</key>
+                <integer>1</integer>
+                <key>uuid</key>
+                <string>A1B2C3D4-E5F6-7890-ABCD-EF1234567890</string>
+                <key>versionDisplayName</key>
+                <string>1.0</string>
+                <key>className</key>
+                <string>AnalogFilmPlugin.AnalogFilmEffect</string>
+                <key>helpURL</key>
+                <string>https://example.com/analogfilm-help</string>
+                <key>category</key>
+                <string>Color</string>
+                <key>subcategories</key>
+                <array>
+                    <string>Film Emulation</string>
+                </array>
+            </dict>
+        </dict>
+        <key>version</key>
+        <integer>4</integer>
+    </dict>
+</dict>
+</plist>
