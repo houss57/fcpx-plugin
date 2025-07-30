@@ -469,3 +469,87 @@ kernel void colorGrading(
     
     outputTexture.write(float4(color, inputColor.a), gid);
 }
+
+// MARK: - Color Space Conversion Kernels
+
+kernel void colorSpaceConversion(
+    texture2d<float, access::read> inputTexture [[texture(0)]],
+    texture2d<float, access::write> outputTexture [[texture(1)]],
+    constant float3x3& conversionMatrix [[buffer(0)]],
+    uint2 gid [[thread_position_in_grid]]
+) {
+    if (gid.x >= outputTexture.get_width() || gid.y >= outputTexture.get_height()) {
+        return;
+    }
+    
+    float4 inputColor = inputTexture.read(gid);
+    float3 convertedColor = conversionMatrix * inputColor.rgb;
+    
+    outputTexture.write(float4(convertedColor, inputColor.a), gid);
+}
+
+// Log format conversions
+kernel void arriLogCToLinear(
+    texture2d<float, access::read> inputTexture [[texture(0)]],
+    texture2d<float, access::write> outputTexture [[texture(1)]],
+    uint2 gid [[thread_position_in_grid]]
+) {
+    if (gid.x >= outputTexture.get_width() || gid.y >= outputTexture.get_height()) {
+        return;
+    }
+    
+    float4 inputColor = inputTexture.read(gid);
+    float3 logcColor = inputColor.rgb;
+    
+    // ARRI LogC to Linear conversion
+    float3 linearColor = (pow(10.0, (logcColor - 0.385537) / 0.247190) - 0.052272) / 5.555556;
+    linearColor = max(linearColor, 0.0);
+    
+    outputTexture.write(float4(linearColor, inputColor.a), gid);
+}
+
+kernel void sonyS_Log3ToLinear(
+    texture2d<float, access::read> inputTexture [[texture(0)]],
+    texture2d<float, access::write> outputTexture [[texture(1)]],
+    uint2 gid [[thread_position_in_grid]]
+) {
+    if (gid.x >= outputTexture.get_width() || gid.y >= outputTexture.get_height()) {
+        return;
+    }
+    
+    float4 inputColor = inputTexture.read(gid);
+    float3 slog3Color = inputColor.rgb;
+    
+    // Sony S-Log3 to Linear conversion
+    float3 linearColor = select(
+        (slog3Color - 0.092864) / 5.367655,
+        (pow(10.0, (slog3Color - 0.420721) / 0.261266) - 0.037584) / 0.991461,
+        slog3Color >= 0.159301
+    );
+    linearColor = max(linearColor, 0.0);
+    
+    outputTexture.write(float4(linearColor, inputColor.a), gid);
+}
+
+kernel void panasonicV_LogToLinear(
+    texture2d<float, access::read> inputTexture [[texture(0)]],
+    texture2d<float, access::write> outputTexture [[texture(1)]],
+    uint2 gid [[thread_position_in_grid]]
+) {
+    if (gid.x >= outputTexture.get_width() || gid.y >= outputTexture.get_height()) {
+        return;
+    }
+    
+    float4 inputColor = inputTexture.read(gid);
+    float3 vlogColor = inputColor.rgb;
+    
+    // Panasonic V-Log to Linear conversion
+    float3 linearColor = select(
+        (vlogColor - 0.125) / 5.6,
+        pow(10.0, (vlogColor - 0.241514) / 0.14847) - 0.00873,
+        vlogColor >= 0.181
+    );
+    linearColor = max(linearColor, 0.0);
+    
+    outputTexture.write(float4(linearColor, inputColor.a), gid);
+}
